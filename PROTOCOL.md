@@ -48,7 +48,7 @@ _The Sonic Channel Search mode is used for querying the search index. Once in th
 * `<bucket>`: index bucket name (ie. user-specific search classifier in the collection if you have any eg. `user-1, user-2, ..`, otherwise use a common bucket name eg. `generic, default, common, ..`);
 * `<terms>`: text for search terms (between quotes);
 * `<count>`: a positive integer number; set within allowed maximum & minimum limits;
-* `<locale>`: an ISO 639-3 locale code eg. `eng` for English (if set, the locale must be a valid ISO 639-3 code; if not set, the locale will be guessed from text);
+* `<locale>`: an ISO 639-3 locale code eg. `eng` for English (if set, the locale must be a valid ISO 639-3 code; if set to `none`, lexing will be disabled; if not set, the locale will be guessed from text);
 * `<manual>`: help manual to be shown (available manuals: `commands`);
 
 _Notice: the `bucket` terminology may confuse some Sonic users. As we are well-aware Sonic may be used in an environment where end-users may each hold their own search index in a given `collection`, we made it possible to manage per-end-user search indexes with `bucket`. If you only have a single index per `collection` (most Sonic users will), we advise you use a static generic name for your `bucket`, for instance: `default`._
@@ -115,7 +115,7 @@ _The Sonic Channel Ingest mode is used for altering the search index (push, pop 
 * `<bucket>`: index bucket name (ie. user-specific search classifier in the collection if you have any eg. `user-1, user-2, ..`, otherwise use a common bucket name eg. `generic, default, common, ..`);
 * `<object>`: object identifier that refers to an entity in an external database, where the searched object is stored (eg. you use Sonic to index CRM contacts by name; full CRM contact data is stored in a MySQL database; in this case the object identifier in Sonic will be the MySQL primary key for the CRM contact);
 * `<text>`: search text to be indexed (can be a single word, or a longer text; within maximum length safety limits; between quotes);
-* `<locale>`: an ISO 639-3 locale code eg. `eng` for English (if set, the locale must be a valid ISO 639-3 code; if not set, the locale will be guessed from text);
+* `<locale>`: an ISO 639-3 locale code eg. `eng` for English (if set, the locale must be a valid ISO 639-3 code; if set to `none`, lexing will be disabled; if not set, the locale will be guessed from text);
 * `<manual>`: help manual to be shown (available manuals: `commands`);
 
 _Notice: the `bucket` terminology may confuse some Sonic users. As we are well-aware Sonic may be used in an environment where end-users may each hold their own search index in a given `collection`, we made it possible to manage per-end-user search indexes with `bucket`. If you only have a single index per `collection` (most Sonic users will), we advise you use a static generic name for your `bucket`, for instance: `default`._
@@ -169,14 +169,16 @@ _The Sonic Channel Control mode is used for administration purposes. Once in thi
 
 **➡️ Available commands:**
 
-* `TRIGGER`: trigger an action (syntax: `TRIGGER [<action>]?`; time complexity: `O(1)`)
+* `TRIGGER`: trigger an action (syntax: `TRIGGER [<action>]? [<data>]?`; time complexity: `O(1)`)
+* `INFO`: get server information (syntax: `INFO`; time complexity: `O(1)`)
 * `PING`: ping server (syntax: `PING`; time complexity: `O(1)`)
 * `HELP`: show help (syntax: `HELP [<manual>]?`; time complexity: `O(1)`)
 * `QUIT`: stop connection (syntax: `QUIT`; time complexity: `O(1)`)
 
 **⏩ Syntax terminology:**
 
-* `<action>`: action to be triggered (available actions: `consolidate`);
+* `<action>`: action to be triggered (available actions: `consolidate`, `backup`, `restore`);
+* `<data>`: additional data to provide to the action (required for: `backup`, `restore`);
 * `<manual>`: help manual to be shown (available manuals: `commands`);
 
 **⬇️ Control flow example (via `telnet`):**

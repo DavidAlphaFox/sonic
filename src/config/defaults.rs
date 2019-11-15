@@ -51,6 +51,10 @@ pub fn store_kv_pool_inactive_after() -> u64 {
     1800
 }
 
+pub fn store_kv_database_flush_after() -> u64 {
+    900
+}
+
 pub fn store_kv_database_compress() -> bool {
     true
 }
@@ -67,6 +71,14 @@ pub fn store_kv_database_max_flushes() -> u16 {
     1
 }
 
+pub fn store_kv_database_write_buffer() -> usize {
+    16384
+}
+
+pub fn store_kv_database_write_ahead_log() -> bool {
+    true
+}
+
 pub fn store_fst_path() -> PathBuf {
     PathBuf::from("./data/store/fst/")
 }
@@ -77,4 +89,12 @@ pub fn store_fst_pool_inactive_after() -> u64 {
 
 pub fn store_fst_graph_consolidate_after() -> u64 {
     180
+}
+
+pub fn store_fst_graph_max_size() -> usize {
+    2048
+}
+
+pub fn store_fst_graph_max_words() -> usize {
+    250000
 }

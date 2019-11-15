@@ -12,6 +12,7 @@ use whatlang::{
 };
 
 use super::stopwords::LexerStopWord;
+use crate::query::types::QueryGenericLang;
 use crate::store::identifiers::{StoreTermHash, StoreTermHashed};
 
 pub struct TokenLexerBuilder;
@@ -144,7 +145,7 @@ impl TokenLexerBuilder {
                 // Confidence is low, try to detect locale from stop-words.
                 // Notice: this is a fallback but should not be too reliable for short \
                 //   texts.
-                if detector.is_reliable() == false {
+                if !detector.is_reliable() {
                     debug!("[slow lexer] trying to detect locale from stopwords instead");
 
                     // Better alternate locale found?
@@ -213,10 +214,29 @@ impl TokenLexerBuilder {
 impl<'a> TokenLexer<'a> {
     fn new(mode: TokenLexerMode, text: &'a str, locale: Option<Lang>) -> TokenLexer<'a> {
         TokenLexer {
-            mode: mode,
-            locale: locale,
+            mode,
+            locale,
             words: text.unicode_words(),
             yields: HashSet::new(),
+        }
+    }
+}
+
+impl TokenLexerMode {
+    pub fn from_query_lang(lang: Option<QueryGenericLang>) -> TokenLexerMode {
+        match lang {
+            Some(QueryGenericLang::Enabled(lang)) => {
+                // Cleanup with provided language
+                TokenLexerMode::NormalizeAndCleanup(Some(lang))
+            }
+            Some(QueryGenericLang::Disabled) => {
+                // Normalize only (language purposefully set to 'none')
+                TokenLexerMode::NormalizeOnly
+            }
+            None => {
+                // Auto-detect language and cleanup (this is the default behavior)
+                TokenLexerMode::NormalizeAndCleanup(None)
+            }
         }
     }
 }
@@ -237,8 +257,7 @@ impl<'a> Iterator for TokenLexer<'a> {
             let word = word.to_lowercase();
 
             // Check if normalized word is a stop-word? (if should normalize and cleanup)
-            if self.mode == TokenLexerMode::NormalizeOnly
-                || LexerStopWord::is(&word, self.locale) == false
+            if self.mode == TokenLexerMode::NormalizeOnly || !LexerStopWord::is(&word, self.locale)
             {
                 // Hash the term (this is used by all iterator consumers, as well as internally \
                 //   in the iterator to keep track of already-yielded words in a space-optimized \
@@ -246,7 +265,7 @@ impl<'a> Iterator for TokenLexer<'a> {
                 let term_hash = StoreTermHash::from(&word);
 
                 // Check if word was not already yielded? (we return unique words)
-                if self.yields.contains(&term_hash) == false {
+                if !self.yields.contains(&term_hash) {
                     debug!("lexer yielded word: {}", word);
 
                     self.yields.insert(term_hash);

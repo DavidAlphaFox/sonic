@@ -1,6 +1,50 @@
 Sonic Changelog
 ===============
 
+## 1.2.3 (2019-10-14)
+
+### Changes
+
+* RocksDB compression algorithm has been changed from LZ4 to Zstandard, for a slightly better compression ratio, and much better read/write performance; this will be used for new SST files only [[@valeriansaliou](https://github.com/valeriansaliou), [cd4cdfb](https://github.com/valeriansaliou/sonic/commit/cd4cdfb756ae9eccd43dc7e73d2c115b33297714)].
+* Dependencies have been bumped to latest versions (namely: `rocksdb`) [[@valeriansaliou](https://github.com/valeriansaliou), [cd4cdfb](https://github.com/valeriansaliou/sonic/commit/cd4cdfb756ae9eccd43dc7e73d2c115b33297714)].
+
+## 1.2.2 (2019-07-12)
+
+### Bug Fixes
+
+* Fixed a regression on optional configuration values not working anymore, due to an issue in the environment variable reading system introduced in `v1.2.1` [[@valeriansaliou](https://github.com/valeriansaliou), [#155](https://github.com/valeriansaliou/sonic/issues/155)].
+
+### Changes
+
+* Optimized some aspects of FST consolidation and pending operations management [[@valeriansaliou](https://github.com/valeriansaliou), [#156](https://github.com/valeriansaliou/sonic/issues/156)].
+
+## 1.2.1 (2019-07-08)
+
+### Changes
+
+* FST graph consolidation is now able to ignore new words when the graph is over configured limits, which are set with the new `store.fst.graph.max_size` and `store.fst.graph.max_words` configuration variables [[@valeriansaliou](https://github.com/valeriansaliou), [53db9c1](https://github.com/valeriansaliou/sonic/commit/53db9c186630a6751c0a85e610cebabace1aee2b)].
+* An integration testing infrastructure has been added to the Sonic automated test suite [[@vilunov](https://github.com/vilunov), [#154](https://github.com/valeriansaliou/sonic/pull/154)].
+* Configuration values can now be sourced from environment variables, using the `${env.VARIABLE}` syntax in `config.cfg` [[@perzanko](https://github.com/perzanko), [#148](https://github.com/valeriansaliou/sonic/pull/148)].
+* Dependencies have been bumped to latest versions (namely: `rand`, `radix` and `hashbrown`) [[@valeriansaliou](https://github.com/valeriansaliou), [c1b1f54](https://github.com/valeriansaliou/sonic/commit/c1b1f54ad836df553bec0cd14f041bb34058307c)].
+
+## 1.2.0 (2019-05-03)
+
+### Bug Fixes
+
+* Fixed a rare deadlock occuring when 3 concurrent operations get executed on different threads for the same collection, in the following timely order: `PUSH` then `FLUSHB` then `PUSH` [[@valeriansaliou](https://github.com/valeriansaliou), [d96546b](https://github.com/valeriansaliou/sonic/commit/d96546bd9d8b79332df1106766377e4a4acebd50)].
+
+### Changes
+
+* Reworked the KV store manager to perform periodic memory flushes to disk, thus reducing startup time [[@valeriansaliou](https://github.com/valeriansaliou), [6713488](https://github.com/valeriansaliou/sonic/commit/6713488af3543bca33be6e772936f9668430ba86)].
+* Stop accepting Sonic Channel commands when shutting down Sonic [[@valeriansaliou](https://github.com/valeriansaliou), [#131](https://github.com/valeriansaliou/sonic/issues/131)].
+
+### New Features
+
+* Introduced a server statistics `INFO` command to Sonic Channel [[@valeriansaliou](https://github.com/valeriansaliou), [#70](https://github.com/valeriansaliou/sonic/issues/70)].
+* Added the ability to disable the lexer for a command with the command modifier `LANG(none)` [[@valeriansaliou](https://github.com/valeriansaliou), [#108](https://github.com/valeriansaliou/sonic/issues/108)].
+* Added a backup and restore system for both KV and FST stores, which can be triggered over Sonic Channel with `TRIGGER backup` and `TRIGGER restore` [[@valeriansaliou](https://github.com/valeriansaliou), [#5](https://github.com/valeriansaliou/sonic/issues/5)].
+* Added the ability to disable KV store WAL (Write-Ahead Log) with the `write_ahead_log` option, which helps limit write wear on heavily loaded SSD-backed servers [[@valeriansaliou](https://github.com/valeriansaliou), [#130](https://github.com/valeriansaliou/sonic/issues/130)].
+
 ## 1.1.9 (2019-03-29)
 
 ### Bug Fixes

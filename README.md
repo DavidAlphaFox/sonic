@@ -9,6 +9,8 @@ Sonic can be used as a simple alternative to super-heavy and full-featured searc
 
 A strong attention to performance and code cleanliness has been given when designing Sonic. It aims at being crash-free, super-fast and puts minimum strain on server resources (our measurements have shown that Sonic - when under load - responds to search queries in the μs range, eats ~30MB RAM and has a low CPU footprint; [see our benchmarks](https://github.com/valeriansaliou/sonic#how-fast--lightweight-is-it)).
 
+_Tested at Rust version: `rustc 1.37.0 (eae3437df 2019-08-13)`_
+
 **🇫🇷 Crafted in Nantes, France.**
 
 **:newspaper: The Sonic project was initially announced in [a post on my personal journal](https://journal.valeriansaliou.name/announcing-sonic-a-super-light-alternative-to-elasticsearch/).**
@@ -22,9 +24,11 @@ A strong attention to performance and code cleanliness has been given when desig
 <table>
 <tr>
 <td align="center"><a href="https://crisp.chat/"><img src="https://valeriansaliou.github.io/sonic/images/logo-crisp.png" height="64" /></a></td>
+<td align="center"><a href="https://scrumpy.io/"><img src="https://valeriansaliou.github.io/sonic/images/logo-scrumpy.png" height="64" /></a></td>
 </tr>
 <tr>
 <td align="center">Crisp</td>
+<td align="center">Scrumpy</td>
 </tr>
 </table>
 
@@ -67,7 +71,7 @@ cargo build --release
 
 You can find the built binaries in the `./target/release` directory.
 
-_Install `clang` to be able to compile the required RocksDB dependency._
+_Install `clang`, `clang-dev`, `g++` and `llvm-dev` to be able to compile the required RocksDB dependency._
 
 **👉 Install from Cargo:**
 
@@ -86,13 +90,13 @@ You might find it convenient to run Sonic via Docker. You can find the pre-built
 First, pull the `valeriansaliou/sonic` image:
 
 ```bash
-docker pull valeriansaliou/sonic:v1.1.9
+docker pull valeriansaliou/sonic:v1.2.3
 ```
 
 Then, seed it a configuration file and run it (replace `/path/to/your/sonic/config.cfg` with the path to your configuration file):
 
 ```bash
-docker run -p 1491:1491 -v /path/to/your/sonic/config.cfg:/etc/sonic.cfg -v /path/to/your/sonic/store/:/var/lib/sonic/store/ valeriansaliou/sonic:v1.1.9
+docker run -p 1491:1491 -v /path/to/your/sonic/config.cfg:/etc/sonic.cfg -v /path/to/your/sonic/store/:/var/lib/sonic/store/ valeriansaliou/sonic:v1.2.3
 ```
 
 In the configuration file, ensure that:
@@ -127,28 +131,39 @@ _If you are looking for details on the raw Sonic Channel TCP-based protocol, you
 
 #### 1️⃣ Official Libraries
 
-Sonic distributes official Sonic integration libraries for your programming language:
+Sonic distributes official Sonic integration libraries for your programming language (official means that those libraries have been reviewed and validated by a core maintainer):
 
 * **NodeJS**:
   * **[node-sonic-channel](https://www.npmjs.com/package/sonic-channel)** by [@valeriansaliou](https://github.com/valeriansaliou)
+* **PHP**:
+  * **[psonic](https://github.com/ppshobi/psonic)** by [@ppshobi](https://github.com/ppshobi)
 
 #### 2️⃣ Community Libraries
 
 You can find below a list of Sonic integrations provided by the community (many thanks to them!):
 
+* **Rust**:
+  * **[sonic_client](https://github.com/FrontMage/sonic_client)** by [@FrontMage](https://github.com/FrontMage)
 * **Python**:
   * **[asonic](https://github.com/moshe/asonic)** by [@moshe](https://github.com/moshe)
+  * **[python-sonic-client](https://github.com/xmonader/python-sonic-client)** by [@xmonader](https://github.com/xmonader)
 * **Ruby**:
   * **[sonic-ruby](https://github.com/atipugin/sonic-ruby)** by [@atipugin](https://github.com/atipugin)
 * **Go**:
   * **[go-sonic](https://github.com/expectedsh/go-sonic)** by [@alexisvisco](https://github.com/alexisvisco)
+  * **[go-sonic](https://github.com/OGKevin/go-sonic)** by [@OGKevin](https://github.com/OGKevin)
 * **PHP**:
   * **[php-sonic](https://github.com/php-sonic/php-sonic)** by [@touhonoob](https://github.com/touhonoob)
+  * **[laravel-scout-sonic](https://github.com/james2doyle/laravel-scout-sonic)** by [@james2doyle](https://github.com/james2doyle)
 * **Java**:
   * **[java-sonic](https://github.com/twohou/java-sonic)** by [@touhonoob](https://github.com/touhonoob)
   * **[jsonic](https://github.com/alohaking/jsonic)** by [@alohaking](https://github.com/alohaking)
 * **Elixir**:
   * **[sonix](https://github.com/imerkle/sonix)** by [@imerkle](https://github.com/imerkle)
+* **Nim**:
+  * **[nim-sonic-client](https://github.com/xmonader/nim-sonic-client)** by [@xmonader](https://github.com/xmonader)
+* **.NET**:
+  * **[nsonic](https://github.com/spikensbror-dotnet/nsonic)** by [@spikensbror](https://github.com/spikensbror)
 
 _ℹ️ Cannot find the library for your programming language? Build your own and be referenced here! ([contact me](https://valeriansaliou.name/))_
 

@@ -117,7 +117,7 @@ pub trait StoreGenericPool<
             }
         }
 
-        if removal_register.is_empty() == false {
+        if !removal_register.is_empty() {
             let mut store_pool_write = pool.write().unwrap();
 
             for collection_bucket in &removal_register {
@@ -147,15 +147,10 @@ pub trait StoreGenericActionBuilder {
         kind: &str,
         collection: T,
         bucket: Option<T>,
-        access_lock: &Arc<RwLock<bool>>,
     ) -> Result<u32, ()> {
         let collection_str = collection.into();
 
         info!("{} erase requested on collection: {}", kind, collection_str);
-
-        // Acquire access lock (in blocking write mode), and reference it in context
-        // Notice: this prevents store to be acquired from any context
-        let _access = access_lock.write().unwrap();
 
         if let Some(bucket) = bucket {
             Self::proceed_erase_bucket(collection_str, bucket.into())
