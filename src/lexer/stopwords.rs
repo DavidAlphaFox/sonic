@@ -136,6 +136,7 @@ fn make<'a>(words: &[&'a str]) -> HashSet<&'a str> {
 }
 
 impl LexerStopWord {
+    // 检查是否是停止字
     pub fn is(word: &str, locale: Option<Lang>) -> bool {
         if let Some(locale) = locale {
             // Word is a stopword (given locale)
